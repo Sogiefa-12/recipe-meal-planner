@@ -1,0 +1,14 @@
+
+.nav-wrapper {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    background-color: #f8f8f8;
+  }
+  
+  .nav-wrapper a {
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #333;
+    text-align: center;
+  }
