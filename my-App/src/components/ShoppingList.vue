@@ -44,4 +44,19 @@
   };
   </script>
   
-  <style scoped></style>
+  <style scoped>
+  form {
+
+    width: 100%;
+    background-color: lightslategray;
+  }
+
+  form input {
+   width: 30%;
+    height: 5.3vh;
+    font-size: medium;
+    margin: 10px;
+    border: 5px solid black;
+  }
+
+</style>
