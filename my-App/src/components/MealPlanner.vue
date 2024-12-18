@@ -1,97 +1,87 @@
-<!-- <template>
+
+
+  <template>
     <div>
       <h2>Meal Planner</h2>
-      <form @submit.prevent="addMeal">
-        <input type="text" v-model="mealInput" placeholder="Enter meal name">
-        <button type="submit">Add Meal</button>
-      </form>
-      <h3>Your Meal Plan</h3>
-      <ul>
-        <li v-for="meal in meals" :key="meal.name">
-          <div class="meal-container">
-            {{ meal.name }}
-            <button @click="removeMeal(meal)">Remove</button>
-          </div>
-        </li>
-      </ul>
+      <div class="meal-grid">
+        <div v-for="recipe in mealPlan" :key="recipe.id" class="meal-item">
+          <img :src="recipe.image" alt="Recipe Image" />
+          <h3>{{ recipe.title }}</h3>
+          <p>Cooking Time: {{ recipe.cookingTime }} minutes</p>
+          <p>Nutrition Facts: {{ recipe.nutritionFacts }}</p>
+          <button @click="removeRecipe(recipe)">Remove Recipe</button>
+        </div>
+      </div>
     </div>
   </template>
   
   <script>
+  import { ref } from 'vue';
+  
   export default {
-    data() {
+    name: 'MealPlanner',
+    setup() {
+      const mealPlan = ref(JSON.parse(localStorage.getItem('mealPlan')) || []);
+  
+      const removeRecipe = (recipe) => {
+        const newMealPlan = mealPlan.value.filter((item) => item.id !== recipe.id);
+        mealPlan.value = newMealPlan;
+        localStorage.setItem('mealPlan', JSON.stringify(newMealPlan));
+      };
+  
       return {
-        meals: [],
-        mealInput: '',
+        mealPlan,
+        removeRecipe,
       };
     },
-    methods: {
-      addMeal() {
-        if (this.mealInput.trim()) {
-          // Basic duplicate meal name check
-          if (!this.meals.some((meal) => meal.name === this.mealInput)) {
-            this.meals.push({ name: this.mealInput });
-            this.mealInput = '';
-          } else {
-            console.log("Meal already exists in the meal plan.");
-          }
-        }
-      },
-      removeMeal(mealToRemove) {
-        const index = this.meals.indexOf(mealToRemove);
-        this.meals.splice(index, 1);
-      },
+    mounted() {
+      // console.log('Meal Plan recipes:', mealPlan);
     },
   };
   </script>
   
   <style scoped>
-  ul {
-    list-style-type: none;
-    padding: 0;
+.meal-grid {
+  display: grid;
+  gap: 10px;
+  padding: 20px;
+  margin: 0 auto;
+  max-width: 1200px;
+  margin-top: 50px;
+}
+
+.meal-item {
+  background: #f7f7f7;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.meal-item:nth-last-child(1) {
+  margin-bottom: 0;
+}
+
+@media (max-width: 767px) {
+  .meal-grid {
+    grid-template-columns: 1fr;
   }
-  
-  .meal-container {
-    display: flex;
-    justify-content: space-between;
+
+  .meal-item {
+    padding: 10px;
   }
-  </style> -->
+}
 
+@media (min-width: 768px) {
+  .meal-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
 
-  <!-- MealPlanner.vue -->
-
-
-  <!-- MealPlanner.vue -->
-<template>
-  <div>
-    <h2>Meal Planner</h2>
-    <div v-for="recipe in mealPlan" :key="recipe.id">
-      <img :src="recipe.image" alt="Recipe Image" />
-      <h3>{{ recipe.title }}</h3>
-      <p>Cooking Time: {{ recipe.cookingTime }} minutes</p>
-      <p>Nutrition Facts: {{ recipe.nutritionFacts }}</p>
-    </div>
-  </div>
-</template>
-
-<script>
-import { ref } from 'vue';
-
-export default {
-  name: 'MealPlanner',
-  setup() {
-    const mealPlan = ref(JSON.parse(localStorage.getItem('mealPlan')) || []);
-
-    return {
-      mealPlan,
-    };
-  },
-  mounted() {
-    // const plainMealPlan = JSON.parse(JSON.stringify(mealPlan)) ||
-    // console.log('Meal Plan recipes:', plainMealPlan);
-  },
-};
-</script>
-
-<style scoped>
+@media (min-width: 1024px) {
+  .meal-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
 </style>

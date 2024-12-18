@@ -4,6 +4,8 @@
     justify-content: space-between;
     width: 100%;
     background-color: #f8f8f8;
+    height: 120%;
+
   }
   
   .nav-wrapper a {
@@ -11,4 +13,9 @@
     text-decoration: none;
     color: #333;
     text-align: center;
+  }
+
+  header,img {
+    display: flex;
+   
   }

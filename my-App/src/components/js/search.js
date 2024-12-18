@@ -1,50 +1,58 @@
-
-import { defineComponent, ref } from 'vue';
+import { ref, watch } from 'vue';
 import debounce from 'lodash.debounce';
 
 const searchQuery = ref('');
 const searchResults = ref([]);
 
-const search = async () => {
-  const url = `https://api.spoonacular.com/recipes/findByIngredients?apiKey=287183c67530424b9365f23df2281430&ingredients=${searchQuery.value}&number=10`;
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error('Network  response was not ok');
+const SPOONACULAR_API_KEY = '287183c67530424b9365f23df2281430';
+
+const searchByIngredients = async (searchQuery) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const url = `https://api.spoonacular.com/recipes/findByIngredients?apiKey=${SPOONACULAR_API_KEY}&ingredients=${searchQuery}&number=10`;
+      const response = await fetch(url);
+      if (!response.ok) {
+        reject(new Error('Network response was not ok'));
+      }
+      const data = await response.json();
+      resolve(data);
+    } catch (error) {
+      console.error('Error fetching recipes:', error);
+      reject(error);
     }
-    const data = await response.json();
-    searchResults.value = data;
-  } catch (error) {
-    console.error('Error fetching recipes:', error);
-  }
-  
+  });
+};
+
+const searchByNutrients = async () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const url = `https://api.spoonacular.com/recipes/findByNutrients?apiKey=${SPOONACULAR_API_KEY}&minCarbs=15&maxCarbs=25&number=10`;
+      const response = await fetch(url);
+      if (!response.ok) {
+        reject(new Error('Network response was not ok'));
+      }
+      const data = await response.json();
+      resolve(data);
+    } catch (error) {
+      console.error('Error fetching recipes:', error);
+      reject(error);
+    }
+  });
 };
 
 const addToMealPlan = async (recipe) => {
-  const currentMealPlan = JSON.parse(localStorage.getItem('mealPlan')) || [];
+  // Get the meal plan from local storage or initialize an empty array
+  let mealPlan = JSON.parse(localStorage.getItem('mealPlan')) || [];
 
-  const fullRecipe = await fetch(recipe.recipeAPIUrl).then(res => res.json());
-  const nutritionInfo = fullRecipe.extendedIngredients.nutrition.find(info => info.measurementType === 'serving');
+  // Add the recipe to the meal plan
+  mealPlan.push(recipe);
 
-  const updatedRecipe = {
-    ...recipe,
-    cookingTime: fullRecipe.readyInMinutes,
-    nutritionFacts: `${nutritionInfo.calories}, ${nutritionInfo.protein}, ${nutritionInfo.fat}, ${nutritionInfo.carbohydrates}`,
-  };
-
-  currentMealPlan.push(updatedRecipe);
-  localStorage.setItem('mealPlan', JSON.stringify(currentMealPlan));
+  // Save the updated meal plan to local storage
+  localStorage.setItem('mealPlan', JSON.stringify(mealPlan));
 };
 
-const debouncedSearch = () => {
-  debounce(search, 500)();
-};
 
-const Search = defineComponent({
-  name: 'Search',
-  setup() {
-    return { searchQuery, searchResults, debouncedSearch, addToMealPlan };
-  },
-});
+export { searchByIngredients, searchByNutrients, addToMealPlan };
 
-export default Search;
+
+

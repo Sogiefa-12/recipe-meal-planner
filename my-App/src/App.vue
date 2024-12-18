@@ -1,22 +1,24 @@
 <template> 
   <div>
     <header> 
+      <img src="/public/images/logo.jpg" alt="logo">
 
       <nav class="nav-wrapper" > 
+        
         <router-link to="/">Home</router-link>
         <router-link to="/search">Search</router-link>
         <router-link to="/meal-planner">Meal Planner</router-link>
         <router-link to="/shopping-list">Shopping List</router-link>
         <router-link to="/profile">Profile</router-link>
       </nav>
+    </header>
+    <main>
       <h1>
         Recipe and Meal Planner
       </h1>
-    </header>
-    <main>
+    
         <router-view></router-view>
-
-        <img src="" alt="background Image">
+       
     </main>
 
   </div>

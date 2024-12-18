@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import './style.css'
 import router from './router';
 import App from './App.vue'
+// import 'dotenv/config';
 
 // Importing the components
 import Home from './components/Home.vue'
@@ -20,3 +21,4 @@ createApp(App)
     .component('ShoppingList', ShoppingList)
     .component('MealPlanner', MealPlanner)
     .mount('#app')
+

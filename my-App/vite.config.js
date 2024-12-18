@@ -1,12 +1,8 @@
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import dotenv from 'dotenv'
-
-dotenv.config()
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
 
 export default defineConfig({
-  root: './',
   plugins: [
-    vue(),
-  ],
-})
+    vue()
+  ]
+});
